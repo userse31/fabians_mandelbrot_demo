@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>Fabian's MandelBrot Set Demo (but minimized)</title>
+</head>
+<body>
+	<center>
+		<canvas id="vga" width="640" height="480"></canvas>
+		<h1>Credits:</h1>
+		<p>The original source is written by "Fabian Quijosaca" (I probably mispronounced that in my head...). They way they wrote it kinda triggered me, so I rewrote their code but more in my style.</p>
+		<p>But hey, I got a mandelbrot demo working on my casio fx6300g clone! (Corner Office ATC-139)</p>
+		<p>Link to the original page: https://dev.to/foqc/mandelbrot-set-in-js-480o</p>
+		<p>Thanks Fabian! And god speed!</p>
+	</center>
+</body>
+<script>
+const MAX_STEPS=80;
+function mandelbrot(c){
+	var z={x:0,y:0};
+	var n=0;
+	var p={x:0,y:0};
+	var d=0;
+	do{
+		p.x=(z.x*z.x)-(z.y*z.y);
+		p.y=2*z.x*z.y;
+		z.x=p.x+c.x;
+		z.y=p.y+c.y;
+		d=Math.sqrt((z.x*z.x)+(z.y*z.y));
+		n+=1;
+	}while(d<=2&&n<MAX_STEPS);
+	return d<=2;
+}
+var canvas = document.getElementById('vga');
+var ctx = canvas.getContext('2d');
+const WIDTH=640;
+const HEIGHT=480;
+const R_SET={start:-2,end:1};
+const I_SET={start:-1,end:1};
+function draw() {
+    var tmp,m,isMandelbrotSet;
+    for (var i=0;i<WIDTH;i++) {
+        for (var j=0;j<HEIGHT;j++) {
+            complex={
+                x:R_SET.start+(i/WIDTH)*(R_SET.end-R_SET.start),
+                y:I_SET.start+(j/HEIGHT)*(I_SET.end-I_SET.start)
+            };
+	    mandelbrot(complex)?ctx.fillRect(i, j, 1, 1):0;
+        }
+    }
+}
+draw();
+/*
+What, you actually WANT that demo for you fx6300g clone? Alright, FINE. Just make sure you don't run your batteries down, and also pull up a game on your mobile phone.
+
+MAX_STEPS set to "10" for OBVIOUS SPEED REASONS.
+
+P0:Cls:-3.8->A:-2.2->B:Lbl 0:Prog 1:Ans=1=>Prog 2:A+0.1->A:A<3.9=>Goto 0:-2.2->A:B+0.1->B:B<2.3=>Goto 0
+
+P1:0->C:0->D:0->E:0->F:0->G:0->H:Lbl 0:CC-DD->F:2CD->G:F+A->C:G+B->D:√(CC+DD)->H:Isz E:H<=2=>E<10=>Goto 0:0:H<=2=>1
+
+And because the people who designed this calculator clone didn't triple check all behaviour is identical to the original...
+
+P2:Plot A,B
+
+Bytes consumed:159
+
+Xwindow (Range) settings:
+Xmin:-3.8 Xmax:3.8 Xscl:0
+Ymin:-2.2 Ymax:2.2 Yscl:0
+
+_Speed and/or size optimizations are left as an exercise to the reader._
+
+*/
+</script>
+</html>
